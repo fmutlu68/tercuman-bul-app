@@ -1,8 +1,8 @@
-import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/app/events/register_event.dart';
 import 'package:flutter_app/app/services/firestore_service.dart';
+import 'package:flutter_app/app/services/location_service.dart';
 import 'package:flutter_app/bootstrap/helpers.dart';
 import 'package:flutter_app/resources/extensions/dynamic_size_extension.dart';
 import 'package:flutter_app/resources/extensions/padding_extension.dart';
@@ -32,7 +32,6 @@ class BecomeTranslatorPage extends NyStatefulWidget {
 }
 
 class _BecomeTranslatorPageState extends NyState<BecomeTranslatorPage> {
-  List? countryData;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _instagramController = TextEditingController();
@@ -46,11 +45,9 @@ class _BecomeTranslatorPageState extends NyState<BecomeTranslatorPage> {
 
   @override
   init() async {
-    String json = await DefaultAssetBundle.of(this.context)
-        .loadString("public/assets/data/countries.json");
-    setState(() {
-      countryData = jsonDecode(json);
-    });
+    if (kIsWeb) {
+      LocationService().updateLocation();
+    }
   }
 
   @override
